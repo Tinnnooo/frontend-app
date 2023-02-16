@@ -3,18 +3,21 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import App from './App';
+import store from './states';
+
+import './styles/app.css';
+import './styles/bootstrap.css';
+import './styles/custom.css';
 
 
 const root = createRoot(document.getElementById('root'));
 
 root.render(
-
-  <App />
-  // <Provider>
-  //   <BrowserRouter>
-  //     <StrictMode>
-  //       <App />
-  //     </StrictMode>
-  //   </BrowserRouter>
-  // </Provider>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <StrictMode>
+        <App />
+      </StrictMode>
+    </BrowserRouter>
+  </Provider>,
 );

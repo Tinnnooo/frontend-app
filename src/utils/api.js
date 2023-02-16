@@ -31,15 +31,25 @@ function getAccessToken(){
     return localStorage.getItem('login_tokens');
 }
 
-async function login({id_card_number, password}){
-    const response = await axios.post(`${API_URL}/login`, {
-        body: JSON.stringify({
-            id_card_number,
-            password,
-        }),
+async function logout(){
+    const token = getAccessToken();
+    
+    const response = await axios.post(`${API_URL}/auth/logout?token=${token}`,{
+        params: {
+            token,
+        }
     });
 
-    const token = response.token;
+    return response;
+}
+
+async function login({id_card_number, password}){
+    const response = await axios.post(`${API_URL}/auth/login`, {
+            id_card_number,
+            password,
+    });
+
+    const token = response.data.token;
 
     return token;
 }
@@ -60,10 +70,29 @@ async function getOwnSociety(){
     return society;
 }
 
+async function getOwnConsultation(){
+    const response = await _fetchWithAuth(`${API_URL}/consultations`);
+
+    const {data} = response;
+
+    return data;
+}
+
+async function getOwnVaccination(){
+    const response = await _fetchWithAuth(`${API_URL}/vaccinations`);
+
+    const {vaccinations} = response;
+
+    return vaccinations;
+}
+
 export {
     getOwnSociety,
     apiUrl,
     login,
     putAccessToken,
     getAccessToken,
+    logout,
+    getOwnConsultation,
+    getOwnVaccination,
 };

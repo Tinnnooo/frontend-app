@@ -4,6 +4,7 @@ import { getOwnSociety, login, putAccessToken } from '../../utils/api';
 const ActionType = {
     SET_AUTH_SOCIETY: 'SET_AUTH_SOCIETY',
     UNSET_AUTH_SOCIETY: 'UNSET_AUTH_SOCIETY',
+    SET_ERROR: 'SET_ERROR',
 };
 
 function setAuthSocietyActionCreator(authSociety){
@@ -34,9 +35,16 @@ function asyncSetAuthSociety({id_card_number, password}) {
 
             dispatch(setAuthSocietyActionCreator(authSociety));
         } catch (error){
-            alert(error.message);
+            setError(error.response?.data.message);
         }
         dispatch(hideLoading());
+    }
+}
+
+function setError(error){
+    return {
+        type: ActionType.SET_ERROR,
+        payload: error,
     }
 }
 
