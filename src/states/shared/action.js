@@ -1,7 +1,8 @@
 import { hideLoading, showLoading } from "react-redux-loading-bar"
-import { getOwnConsultation, getOwnSociety, getOwnVaccination } from "../../utils/api";
+import { getOwnConsultation, getOwnVaccination, getSpotByRegion } from "../../utils/api";
 import { getConsultationsActionCreator } from "../consultations/action";
-import { getSocietyActionCreator } from "../societies/action";
+import { getSpotRegionActionCreator } from "../spots/action";
+import { getVaccinationsActionCreator } from "../vaccinations/action";
 
 
 function asyncPopulateSocietyAndConsultations(){
@@ -13,7 +14,7 @@ function asyncPopulateSocietyAndConsultations(){
 
             dispatch(getConsultationsActionCreator(consultations));
         } catch (error){
-            console.error(error.message);
+            alert(error.message);
         }
         dispatch(hideLoading());
     }
@@ -26,9 +27,26 @@ function asyncPopulateVaccinations(){
         try {
             const vaccinations = await getOwnVaccination();
 
+            dispatch(getVaccinationsActionCreator(vaccinations));
         } catch (error) {
-            console.error(error.message);
+            alert(error.message);
         }
+        dispatch(hideLoading());
+    }
+}
+
+function asyncPopulateSpots(){
+    return async (dispatch) => {
+        dispatch(showLoading());
+
+        try{
+            const spots = await getSpotByRegion();
+
+            dispatch(getSpotRegionActionCreator(spots));
+        } catch (error) {
+            alert(error.message);
+        }
+        
         dispatch(hideLoading());
     }
 }
@@ -36,4 +54,5 @@ function asyncPopulateVaccinations(){
 export {
     asyncPopulateSocietyAndConsultations,
     asyncPopulateVaccinations,
+    asyncPopulateSpots,
 }

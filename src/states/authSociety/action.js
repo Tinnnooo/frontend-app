@@ -35,16 +35,9 @@ function asyncSetAuthSociety({id_card_number, password}) {
 
             dispatch(setAuthSocietyActionCreator(authSociety));
         } catch (error){
-            setError(error.response?.data.message);
+            alert(error.message);
         }
         dispatch(hideLoading());
-    }
-}
-
-function setError(error){
-    return {
-        type: ActionType.SET_ERROR,
-        payload: error,
     }
 }
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import ConsultationItem from "./ConsultationItem";
 
 function Consultations({consultations}){
@@ -15,28 +16,33 @@ function Consultations({consultations}){
                                     <h5 className="mb-0">Consultation</h5>
                                 </div>
                                 <div className="card-body">
-                                    <button type="button" className="btn">+ Request consultation</button>
+                                    <Link to="/request-consultation">+ Request consultation</Link>
                                 </div>
                             </div>
                         </div>
                     </>
                 ) : null}
-
-                {consultations.length > 0 ? (
-                    <>  
-                    {consultations.map((consultation) => (
-                        <ConsultationItem 
-                        key={consultation.id}
-                        {...consultation}
-                        />
-                    ))}
-                    </>
-                ): (
-                    <>
-                        <p>You haven't request consultation yet.</p>
-                    </>
+                {consultations ? (
+                    consultations.length > 0 ? (
+                        <>  
+                        {consultations.map((consultation, index) => (
+                            <ConsultationItem 
+                            key={index}
+                            {...consultation}
+                            />
+                        ))}
+                        </>
+                    ): (
+                        <>
+                            <p>You haven't request consultation yet.</p>
+                        </>
+                    )
+                ) : (
+                    <div>
+                        Loading...
+                    </div>
                 )}
-
+                
                     
             </div>
         </section>

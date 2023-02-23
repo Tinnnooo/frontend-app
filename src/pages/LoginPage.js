@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import LoginInput from "../components/LoginInput";
 import { asyncSetAuthSociety } from "../states/authSociety/action";
 
-function LoginPage({error}) {
+function LoginPage() {
     const dispatch = useDispatch();
 
     const onLogin = ({id_card_number, password}) => {
@@ -15,7 +15,7 @@ function LoginPage({error}) {
         <div className="container">
             <div className="row justify-content-center">
                 <div className="col-md-6">
-                    <LoginInput login={onLogin} error={error}/>
+                    <LoginInput login={onLogin}/>
                 </div>
             </div>
         </div>

@@ -19,7 +19,7 @@ async function _fetchWithAuth(url, options = {}) {
         });
         return response.data;
     } catch (error) {
-        console.error(error);
+        throw new Error(error.response.data.message);
     }
 }
 
@@ -33,25 +33,35 @@ function getAccessToken(){
 
 async function logout(){
     const token = getAccessToken();
-    
-    const response = await axios.post(`${API_URL}/auth/logout?token=${token}`,{
-        params: {
-            token,
-        }
-    });
 
-    return response;
+    try {
+        const response = await axios.post(`${API_URL}/auth/logout?token=${token}`,{
+            params: {
+                token,
+            }
+        });
+    
+        return response;
+    } catch (error){
+        throw new Error(error.response.data.message);
+    }
+    
 }
 
 async function login({id_card_number, password}){
-    const response = await axios.post(`${API_URL}/auth/login`, {
+    try{
+        const response = await axios.post(`${API_URL}/auth/login`, {
             id_card_number,
             password,
-    });
+        });
 
-    const token = response.data.token;
+        const token = response.data.token;
 
-    return token;
+        return token;
+    } catch (error){
+        throw new Error(error.response.data.message);
+    }
+    
 }
 
 async function getOwnSociety(){
@@ -71,28 +81,114 @@ async function getOwnSociety(){
 }
 
 async function getOwnConsultation(){
-    const response = await _fetchWithAuth(`${API_URL}/consultations`);
 
-    const {data} = response;
+    try{
+        const response = await _fetchWithAuth(`${API_URL}/consultations`);
 
-    return data;
+        const {data} = response;
+    
+        return data;
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+    
+
 }
 
 async function getOwnVaccination(){
-    const response = await _fetchWithAuth(`${API_URL}/vaccinations`);
+    try{
+        const response = await _fetchWithAuth(`${API_URL}/vaccinations`);
 
-    const {vaccinations} = response;
-
-    return vaccinations;
+        const {vaccinations} = response;
+    
+        return vaccinations;
+    } catch (error){
+        throw new Error(error.response.data.message);
+    }
 }
+
+async function addConsultation({disease_history, current_symptoms}){
+    const token = getAccessToken();
+
+    try {
+        const response = await axios.post(`${API_URL}/consultations`, {
+            disease_history,
+            current_symptoms,
+        },{
+            params: {
+                token,
+            },
+        });
+        return response.data;
+    } catch (error){
+        throw new Error(error.response.data.message) 
+    }
+}
+
+async function getSpotByRegion(){
+    const token = getAccessToken();
+
+    try {
+        const response = await axios.get(`${API_URL}/spots`, {
+            params:{
+                token,
+            },
+        });
+
+        const {data: {spots}} = response;
+
+        return spots;
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+}
+
+async function getSpotDetailWithDate(id, date){
+    const token = getAccessToken();
+    try{
+        const response = await axios.get(`${API_URL}/spots/${id}`, {
+            params: {
+                token,
+                date
+            }
+        });
+        const {data} = response;
+
+        return data;
+    } catch (error){
+        throw new Error(error.response.data.message);
+    }
+}
+
+async function addRegisterVaccination({date, spot_id} = {}){
+    const token = getAccessToken();
+    try {
+        const response = await axios.post(`${API_URL}/vaccinations`, {
+            date,
+            spot_id,
+        },{
+            params: {
+                token,
+            },
+        });
+        return response;
+    } catch (error){
+       throw new Error(error.response.data.message);
+    }
+}
+
+
 
 export {
     getOwnSociety,
-    apiUrl,
     login,
     putAccessToken,
     getAccessToken,
     logout,
     getOwnConsultation,
     getOwnVaccination,
+    addConsultation,
+    getSpotByRegion,
+    getSpotDetailWithDate,
+    addRegisterVaccination
 };

@@ -8,7 +8,7 @@ function DashboardPage(){
 
     const {
         consultations = null,
-        vaccination = null,
+        vaccinations = null,
         authSociety,
     } = useSelector((states) => states);
 
@@ -30,7 +30,7 @@ function DashboardPage(){
 
             <div className="container">
                 <Consultations consultations={consultations}/>
-                <Vaccinations vaccination={vaccination} />
+                <Vaccinations vaccinations={vaccinations} consultations={consultations} />
             </div>
         </main>
         </>
